@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Corporate Codex — Daily M&A Intelligence</title>
+<meta name="description" content="Corporate Codex delivers daily deep-dive analysis of global M&A activity, disputes, and strategic intelligence for corporate lawyers and finance professionals."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy-950:#060d1f;--navy-900:#0a1628;--navy-800:#0d1b35;--navy-700:#1a2744;
+  --navy-600:#243358;--navy-500:#2e4170;
+  --gold-400:#C9A84C;--gold-300:#DDB96A;--gold-200:#EDD18E;--gold-500:#A8863A;
+  --teal-400:#2DD4BF;--teal-500:#14B8A6;
+  --red-400:#F87171;--red-500:#EF4444;
+  --emerald-400:#34D399;--emerald-500:#10B981;
+  --purple-400:#A78BFA;--amber-400:#FBBF24;--sky-400:#38BDF8;
+  --text-primary:#E8EDF5;--text-secondary:#94A3B8;--text-muted:#64748B;
+  --border:rgba(255,255,255,0.07);--border-hover:rgba(201,168,76,0.3);
+  --glass-bg:rgba(13,27,53,0.7);--glass-bg-hover:rgba(26,39,68,0.85);
+  --card-shadow:0 4px 24px rgba(0,0,0,0.35);--card-shadow-hover:0 8px 40px rgba(0,0,0,0.5);
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-serif:'Playfair Display',Georgia,serif;
+  --font-mono:'JetBrains Mono','Courier New',monospace;
+  --radius:12px;--radius-sm:8px;--radius-xs:4px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--navy-950);color:var(--text-primary);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(201,168,76,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:0;left:0;right:0;height:400px;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(26,39,68,0.6) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+/* HEADER */
+.site-header{position:sticky;top:0;z-index:100;background:rgba(6,13,31,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.header-inner{max-width:1440px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:32px}
+.logo-group{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-mark{display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 8px rgba(201,168,76,0.2))}
+.logo-text{display:flex;flex-direction:column;line-height:1.1}
+.logo-name{font-family:var(--font-serif);font-size:1.15rem;font-weight:700;color:var(--text-primary);letter-spacing:-0.01em}
+.logo-tagline{font-size:0.65rem;font-weight:500;color:var(--gold-400);letter-spacing:0.12em;text-transform:uppercase}
+.header-nav{display:flex;align-items:center;gap:4px;margin-left:auto}
+.nav-link{padding:6px 14px;font-size:0.825rem;font-weight:500;color:var(--text-secondary);text-decoration:none;border-radius:6px;transition:all 0.2s ease;letter-spacing:0.01em}
+.nav-link:hover,.nav-link.active{color:var(--text-primary);background:rgba(255,255,255,0.06)}
+.nav-link.active{color:var(--gold-300)}
+.header-meta{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.live-badge{display:flex;align-items:center;gap:5px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);border-radius:20px;padding:3px 10px;font-size:0.7rem;font-weight:600;color:var(--emerald-400);letter-spacing:0.08em;text-transform:uppercase}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--emerald-400);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.last-updated{font-size:0.72rem;color:var(--text-muted);font-family:var(--font-mono)}
+.refresh-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;color:var(--text-secondary);cursor:pointer;transition:all 0.2s ease}
+.refresh-btn:hover{color:var(--gold-300);border-color:var(--border-hover);background:rgba(201,168,76,0.08)}
+.refresh-btn.spinning svg{animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TICKER */
+.ticker-bar{position:relative;z-index:10;display:flex;align-items:center;background:rgba(10,22,40,0.9);border-bottom:1px solid rgba(201,168,76,0.15);height:36px;overflow:hidden}
+.ticker-label{flex-shrink:0;padding:0 14px;font-size:0.65rem;font-weight:700;letter-spacing:0.15em;color:var(--navy-900);background:var(--gold-400);height:100%;display:flex;align-items:center}
+.ticker-track{flex:1;overflow:hidden;height:100%;display:flex;align-items:center}
+.ticker-content{display:inline-flex;align-items:center;white-space:nowrap;font-size:0.78rem;font-family:var(--font-mono);color:var(--text-secondary);animation:ticker-scroll 70s linear infinite;padding-left:20px}
+.ticker-item{margin-right:40px}
+.ticker-company{color:var(--gold-300);font-weight:600}
+.ticker-value{color:var(--emerald-400)}
+@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* LAYOUT */
+.main-layout{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:28px 24px;display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+
+/* FEED HEADER */
+.feed-header{margin-bottom:20px}
+.feed-title-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.feed-title{font-family:var(--font-serif);font-size:1.6rem;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em}
+.deal-count-badge{background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.25);color:var(--gold-300);font-size:0.72rem;font-weight:600;font-family:var(--font-mono);padding:3px 10px;border-radius:20px;letter-spacing:0.05em}
+.filter-bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.filter-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:0.78rem;font-weight:500;color:var(--text-secondary);cursor:pointer;transition:all 0.2s ease;font-family:var(--font-sans)}
+.filter-btn:hover{border-color:rgba(255,255,255,0.15);color:var(--text-primary)}
+.filter-btn.active{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.35);color:var(--gold-300)}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:0.68rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase}
+.legal-tag{background:rgba(167,139,250,0.12);color:var(--purple-400);border:1px solid rgba(167,139,250,0.25)}
+.finance-tag{background:rgba(56,189,248,0.1);color:var(--sky-400);border:1px solid rgba(56,189,248,0.2)}
+.dispute-tag{background:rgba(248,113,113,0.1);color:var(--red-400);border:1px solid rgba(248,113,113,0.2)}
+.regulatory-tag{background:rgba(251,191,36,0.1);color:var(--amber-400);border:1px solid rgba(251,191,36,0.2)}
+.strategic-tag{background:rgba(52,211,153,0.1);color:var(--emerald-400);border:1px solid rgba(52,211,153,0.2)}
+
+/* DEAL GRID */
+.deal-grid{display:flex;flex-direction:column;gap:14px}
+.skeleton-card{height:180px;border-radius:var(--radius);background:linear-gradient(90deg,rgba(26,39,68,0.4) 25%,rgba(36,51,88,0.5) 50%,rgba(26,39,68,0.4) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* DEAL CARD */
+.deal-card{background:var(--glass-bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;cursor:pointer;transition:all 0.25s ease;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:relative;overflow:hidden;animation:fadeInUp 0.4s ease both}
+.deal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background 0.25s ease}
+.deal-card:hover{background:var(--glass-bg-hover);border-color:var(--border-hover);box-shadow:var(--card-shadow-hover),0 0 0 1px rgba(201,168,76,0.08);transform:translateY(-2px)}
+.deal-card:hover::before{background:linear-gradient(90deg,var(--gold-400),var(--gold-300),transparent)}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.deal-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.deal-card-title{font-size:0.95rem;font-weight:600;color:var(--text-primary);line-height:1.35;flex:1}
+.deal-value-badge{flex-shrink:0;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.2);color:var(--gold-300);font-family:var(--font-mono);font-size:0.78rem;font-weight:600;padding:4px 10px;border-radius:6px;white-space:nowrap}
+.deal-parties{font-size:0.8rem;color:var(--text-secondary);margin-bottom:10px}
+.deal-parties .acquirer{color:var(--sky-400);font-weight:500}
+.deal-parties .arrow{color:var(--text-muted);margin:0 5px}
+.deal-parties .target{color:var(--teal-400);font-weight:500}
+.deal-summary{font-size:0.83rem;color:var(--text-secondary);line-height:1.55;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.deal-card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.deal-tags{display:flex;gap:5px;flex-wrap:wrap}
+.deal-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.deal-date{font-size:0.7rem;color:var(--text-muted);font-family:var(--font-mono)}
+.deal-sector{font-size:0.7rem;color:var(--text-muted);background:rgba(255,255,255,0.04);border:1px solid var(--border);padding:2px 8px;border-radius:4px}
+.read-more-arrow{font-size:0.72rem;color:var(--gold-400);opacity:0;transition:opacity 0.2s ease,transform 0.2s ease}
+.deal-card:hover .read-more-arrow{opacity:1;transform:translateX(3px)}
+
+/* HORIZON SIDEBAR */
+.horizon-sidebar{position:sticky;top:108px;display:flex;flex-direction:column;gap:20px}
+.sidebar-header{padding-bottom:4px}
+.sidebar-title{font-family:var(--font-serif);font-size:1.1rem;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.sidebar-subtitle{font-size:0.75rem;color:var(--text-muted)}
+.rumour-list{display:flex;flex-direction:column;gap:10px}
+.rumour-card{background:var(--glass-bg);border:1px solid var(--border);border-left:3px solid var(--amber-400);border-radius:var(--radius-sm);padding:13px 14px;transition:all 0.2s ease;animation:fadeInUp 0.4s ease both}
+.rumour-card:hover{background:var(--glass-bg-hover);border-color:rgba(251,191,36,0.3);border-left-color:var(--amber-400)}
+.rumour-confidence{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.confidence-label{font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber-400)}
+.confidence-bar{display:flex;gap:2px}
+.confidence-pip{width:6px;height:6px;border-radius:2px;background:rgba(251,191,36,0.2)}
+.confidence-pip.filled{background:var(--amber-400)}
+.rumour-text{font-size:0.8rem;color:var(--text-secondary);line-height:1.45;margin-bottom:6px}
+.rumour-source{font-size:0.68rem;color:var(--text-muted);font-family:var(--font-mono)}
+
+/* MARKET PULSE */
+.market-pulse{background:var(--glass-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px}
+.pulse-header{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.pulse-header::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--teal-400);box-shadow:0 0 6px var(--teal-400)}
+.pulse-metrics{display:flex;flex-direction:column;gap:10px}
+.pulse-metric{display:flex;align-items:center;justify-content:space-between}
+.pulse-metric-label{font-size:0.75rem;color:var(--text-secondary)}
+.pulse-metric-value{font-family:var(--font-mono);font-size:0.78rem;font-weight:600;color:var(--text-primary)}
+.pulse-metric-value.up{color:var(--emerald-400)}
+.pulse-metric-value.down{color:var(--red-400)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(6,13,31,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.25s ease}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-panel{background:var(--navy-800);border:1px solid rgba(201,168,76,0.2);border-radius:16px;width:100%;max-width:760px;max-height:88vh;overflow-y:auto;position:relative;transform:translateY(20px) scale(0.98);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),opacity 0.25s ease;box-shadow:0 24px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(201,168,76,0.05);scrollbar-width:thin;scrollbar-color:rgba(201,168,76,0.2) transparent}
+.modal-overlay.open .modal-panel{transform:translateY(0) scale(1)}
+.modal-panel::-webkit-scrollbar{width:4px}
+.modal-panel::-webkit-scrollbar-track{background:transparent}
+.modal-panel::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.2);border-radius:2px}
+.modal-close{position:sticky;top:16px;float:right;margin:16px 16px 0 0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);cursor:pointer;transition:all 0.2s ease;z-index:10}
+.modal-close:hover{background:rgba(248,113,113,0.1);border-color:rgba(248,113,113,0.3);color:var(--red-400)}
+.modal-content{padding:28px 32px 32px;clear:both}
+.modal-header{margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.modal-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.modal-title{font-family:var(--font-serif);font-size:1.45rem;font-weight:700;color:var(--text-primary);line-height:1.3;margin-bottom:10px}
+.modal-parties-row{display:flex;align-items:center;gap:6px;font-size:0.85rem;margin-bottom:12px}
+.modal-acquirer{color:var(--sky-400);font-weight:600}
+.modal-arrow{color:var(--text-muted)}
+.modal-target{color:var(--teal-400);font-weight:600}
+.modal-kv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.modal-kv{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.modal-kv-key{font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px}
+.modal-kv-value{font-size:0.88rem;font-weight:600;color:var(--text-primary)}
+.modal-kv-value.highlight{color:var(--gold-300)}
+.lens-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.lens-card{background:rgba(255,255,255,0.025);border:1px solid var(--border);border-radius:10px;padding:16px 18px;transition:border-color 0.2s}
+.lens-card:hover{border-color:rgba(255,255,255,0.12)}
+.lens-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.lens-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.lens-icon.finance{background:rgba(56,189,248,0.12)}
+.lens-icon.legal{background:rgba(167,139,250,0.12)}
+.lens-icon.dispute{background:rgba(248,113,113,0.1)}
+.lens-icon.strategic{background:rgba(52,211,153,0.1)}
+.lens-label{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase}
+.lens-label.finance{color:var(--sky-400)}
+.lens-label.legal{color:var(--purple-400)}
+.lens-label.dispute{color:var(--red-400)}
+.lens-label.strategic{color:var(--emerald-400)}
+.lens-body{font-size:0.82rem;color:var(--text-secondary);line-height:1.6}
+
+/* FOOTER */
+.site-footer{position:relative;z-index:1;margin-top:48px;border-top:1px solid var(--border);background:rgba(6,13,31,0.8);padding:28px 24px}
+.footer-inner{max-width:1440px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.footer-brand{display:flex;align-items:baseline;gap:10px}
+.footer-tagline{font-size:0.75rem;color:var(--text-muted)}
+.footer-smallprint{font-size:0.72rem;color:var(--text-muted);line-height:1.65;max-width:900px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 24px;color:var(--text-muted)}
+.empty-state-icon{font-size:2.5rem;margin-bottom:12px;opacity:0.4}
+.empty-state-text{font-size:0.9rem}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.15)}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .main-layout{grid-template-columns:1fr}
+  .horizon-sidebar{position:relative;top:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .sidebar-header{grid-column:1/-1}
+  .lens-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .header-inner{padding:0 16px;gap:12px}
+  .logo-tagline{display:none}
+  .header-nav{gap:2px}
+  .nav-link{padding:5px 9px;font-size:0.78rem}
+  .last-updated{display:none}
+  .main-layout{padding:16px}
+  .horizon-sidebar{grid-template-columns:1fr}
+  .modal-content{padding:20px}
+  .lens-grid{grid-template-columns:1fr}
+  .modal-title{font-size:1.2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-group">
+      <div class="logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="6" fill="url(#logoGrad)"/>
+          <path d="M7 9h14M7 14h9M7 19h11" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="21" cy="19" r="3" fill="#C9A84C"/>
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#1A2744"/><stop offset="1" stop-color="#0D1B35"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">Corporate Codex</span>
+        <span class="logo-tagline">M&amp;A Intelligence</span>
+      </div>
+    </div>
+    <nav class="header-nav">
+      <a href="#deals" class="nav-link active" id="nav-deals">Deal Feed</a>
+      <a href="#horizon" class="nav-link" id="nav-horizon">Horizon Scanner</a>
+      <a href="#about" class="nav-link" id="nav-about">About</a>
+    </nav>
+    <div class="header-meta">
+      <div class="live-badge" id="live-badge">
+        <span class="live-dot"></span>
+        <span>Live</span>
+      </div>
+      <div class="last-updated" id="last-updated">Loading…</div>
+      <button class="refresh-btn" id="refresh-btn" title="Refresh">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-label">LIVE</div>
+  <div class="ticker-track">
+    <div class="ticker-content" id="ticker-content">Loading…</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main-layout">
+
+  <!-- DEAL FEED -->
+  <section id="deals">
+    <div class="feed-header">
+      <div class="feed-title-row">
+        <h1 class="feed-title">Deal Feed</h1>
+        <span class="deal-count-badge" id="deal-count">— deals</span>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="legal"><span class="tag legal-tag">Legal</span></button>
+        <button class="filter-btn" data-filter="finance"><span class="tag finance-tag">Finance</span></button>
+        <button class="filter-btn" data-filter="dispute"><span class="tag dispute-tag">Dispute</span></button>
+        <button class="filter-btn" data-filter="regulatory"><span class="tag regulatory-tag">Regulatory</span></button>
+      </div>
+    </div>
+    <div class="deal-grid" id="deal-grid">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+  </section>
+
+  <!-- SIDEBAR -->
+  <aside class="horizon-sidebar" id="horizon">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-right:6px;color:#C9A84C"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        Horizon Scanner
+      </h2>
+      <p class="sidebar-subtitle">Unconfirmed intelligence &amp; market rumours</p>
+    </div>
+    <div class="rumour-list" id="rumour-list"></div>
+    <div class="market-pulse">
+      <div class="pulse-header">Market Pulse</div>
+      <div class="pulse-metrics" id="pulse-metrics"></div>
+    </div>
+  </aside>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal-panel">
+    <button class="modal-close" id="modal-close" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+    <div class="modal-content" id="modal-content"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer" id="about">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-name" style="font-size:1rem;">Corporate Codex</span>
+      <span class="footer-tagline">Daily M&amp;A Intelligence for Legal &amp; Finance Professionals</span>
+    </div>
+    <p class="footer-smallprint">
+      Corporate Codex is a demonstration intelligence platform. Deal data is sourced from publicly available RSS feeds and financial news APIs (including Reuters, Financial Times, and SEC EDGAR filings). Analysis is generated using large language models (LLMs) for synthesis and is intended for informational purposes only. This platform does not constitute legal, financial, or investment advice. All deal values, structures, and commentary are drawn from public sources and AI-assisted interpretation. Content updates automatically every 24 hours via a scheduled pipeline. &copy; <span id="footer-year"></span> Corporate Codex.
+    </p>
+  </div>
+</footer>
+
+<script>
+// ── Data ────────────────────────────────────────────────────────────────────
+const DEALS = [
+  {
+    id:"deal-001",
+    acquirer:"Synapse Capital Group",target:"Meridian BioTech Holdings",
+    value:"$14.2B",premium:"28%",structure:"Cash & Stock",sector:"Life Sciences",
+    date:"19 May 2026",status:"Announced",tags:["finance","regulatory","legal"],
+    summary:"Synapse Capital's bid for Meridian represents the largest life sciences transaction of Q2 2026, with a 28% premium to the 30-day VWAP, funded via a bridge facility underwritten by JPMorgan and Goldman Sachs.",
+    analysis:{
+      finance:"The $14.2B consideration implies an EV/EBITDA multiple of 22x, elevated against the sector median of 17x. Financing is structured as 60% cash (bridge facility, L+175bps) and 40% Synapse equity, with a commitment fee of 75bps. Pro-forma leverage reaches 4.8x net debt/EBITDA. The 28% premium reflects a contested process with at least one undisclosed competing bidder.",
+      legal:"Structured as a Scheme of Arrangement under Part 26 of the Companies Act 2006, requiring 75% shareholder approval by value and majority in number. An MAC clause excludes pandemic-related disruptions but captures regulatory revocations. The break fee is 1.0% of deal value (~$142M), with a reverse break fee of 1.5% ($213M) payable upon regulatory failure.",
+      dispute:"The CMA has indicated a Phase 2 review is likely given Meridian's 34% share of the UK rare-disease diagnostics market. Elliott Management, holding a 6.2% stake, has publicly questioned the premium's adequacy and retained Lazard to explore alternatives. A minority shareholder group has filed for appraisal rights in Delaware, citing prior-year EBITDA restatements.",
+      strategic:"Meridian's proprietary CRISPR-Dx platform fills a critical gap in Synapse's diagnostics portfolio. Vertical integration eliminates an estimated $340M in annual third-party COGS. The combined entity targets $600M in synergies over three years, with $180M identified in overlapping R&D spend."
+    }
+  },
+  {
+    id:"deal-002",
+    acquirer:"Vantage Infrastructure Partners",target:"Aeolus Energy Networks",
+    value:"$8.7B",premium:"19%",structure:"Cash",sector:"Utilities / Energy",
+    date:"18 May 2026",status:"Under Review",tags:["regulatory","legal","strategic"],
+    summary:"Vantage's infrastructure fund is pursuing a public-to-private buyout of Aeolus Energy via a recommended cash offer at 650p per share, subject to OFGEM and National Security Act clearances.",
+    analysis:{
+      finance:"The 650p offer implies a 19% premium to the undisturbed 60-day average and a 14.5x EV/EBITDA on FY2025 consensus. Vantage's consortium finances entirely with equity from its flagship Fund V ($22B AUM), preserving Aeolus's investment-grade credit rating at OpCo level. IRR is modelled at 9–11% over a 10-year hold, consistent with regulated utility benchmarks.",
+      legal:"Structured as a Takeover Offer under the City Code, with a 90% acceptance condition threshold to achieve compulsory acquisition. Completion is conditioned on OFGEM approval under the Gas and Electricity (Internal Markets) Act 2011, and a National Security Act 2021 assessment given Aeolus's role as critical national infrastructure. The offer document must be posted within 28 days of announcement.",
+      dispute:"OFGEM has flagged concerns over Vantage's track record on capital expenditure commitments following its 2023 acquisition of Southern Water Utilities. The GMB union has raised workforce restructuring objections. One activist fund holding 3.8% has indicated it will vote against the offer, citing undervaluation relative to regulatory asset base.",
+      strategic:"Aeolus's 4,200km of onshore transmission infrastructure is essential to the government's net-zero grid modernisation programme. Vantage gains a platform for deploying £3.2B in committed capex through 2032, with returns underpinned by the RIIO-ET3 regulatory framework, plus optionality on offshore wind connector assets in Aeolus's development pipeline."
+    }
+  },
+  {
+    id:"deal-003",
+    acquirer:"Atlas Payments Corp",target:"Fluxion Financial Technologies",
+    value:"$3.1B",premium:"41%",structure:"All-Cash",sector:"Fintech",
+    date:"17 May 2026",status:"Hostile",tags:["legal","dispute","finance"],
+    summary:"Atlas has launched a hostile all-cash tender offer for Fluxion after the target's board unanimously rejected a prior approach, triggering poison pill activation and a Delaware court challenge.",
+    analysis:{
+      finance:"The $3.1B bid implies a revenue multiple of 9.8x on Fluxion's $316M LTM revenue — a significant premium to comparable fintech M&A at 6–7x. Atlas is self-funding via a $2.5B RCF and $600M in hybrid notes. Fluxion's own DCF, filed in its board rejection letter, ascribes intrinsic value of $38–44 per share versus Atlas's $36.50 offer.",
+      legal:"Fluxion's board activated its Shareholder Rights Plan at a 15% acquisition threshold, diluting any hostile acquirer's economic interest. Atlas has filed in the Delaware Court of Chancery seeking an injunction to invalidate the pill as a disproportionate defensive measure under the Unocal proportionality standard — whether the threat is real and the response not coercive or preclusive.",
+      dispute:"Three of Fluxion's largest institutional shareholders — representing a combined 22% stake — view the offer as financially inadequate. ISS and Glass Lewis governance analyses are anticipated within 10 business days. Fluxion has engaged Morgan Stanley and Wachtell Lipton as financial and legal advisers, signalling a robust defence.",
+      strategic:"Atlas's core rationale is acquiring Fluxion's embedded payments API stack, which processes $480B in annualised transaction volume across 14 markets. A successful acquisition would double Atlas's addressable merchant base and accelerate its B2B payments roadmap by an estimated 3–4 years. Cross-sell synergies are estimated at $120M annually by year three."
+    }
+  },
+  {
+    id:"deal-004",
+    acquirer:"Corvallis Industrial Holdings",target:"Trentham Precision Manufacturing",
+    value:"$1.9B",premium:"22%",structure:"Stock-for-Stock",sector:"Advanced Manufacturing",
+    date:"16 May 2026",status:"Agreed",tags:["finance","strategic"],
+    summary:"An agreed all-share merger between two mid-cap precision engineering groups, creating a combined £4.2B revenue platform with dominant positioning across aerospace and defence supply chains.",
+    analysis:{
+      finance:"The fixed exchange ratio of 0.85 Corvallis shares per Trentham share implies a 22% premium based on the 20-day VWAP. The all-share structure avoids dilutive debt and maintains 2.1x net leverage. EPS accretion is modelled at 8–11% in year two, driven by procurement savings and facility consolidation across 14 manufacturing sites.",
+      legal:"The transaction proceeds via a Court-sanctioned Scheme of Arrangement requiring shareholder approval from both companies. The combined entity will be re-domiciled in England and Wales. A collar mechanism protects Trentham shareholders if Corvallis shares decline more than 12.5% prior to completion, with a walk-away right at 20%.",
+      dispute:"No material disputes identified. The CMA pre-notification process is underway; both companies operate in complementary sub-sectors, suggesting Phase 1 clearance is achievable. Trade union consultation is ongoing across both workforces.",
+      strategic:"The combined entity targets a top-5 position in global aerospace component supply, responding to structural demand growth from Boeing and Airbus production ramp-ups. Trentham's titanium machining and Corvallis's composite tooling capabilities are genuinely complementary. £180M in cost synergies are targeted by year three, with a further £60M in revenue cross-selling opportunities."
+    }
+  },
+  {
+    id:"deal-005",
+    acquirer:"Northgate Digital Ventures",target:"Cascade Cloud Infrastructure",
+    value:"$6.4B",premium:"35%",structure:"Cash & Rollover Equity",sector:"Technology / Cloud",
+    date:"15 May 2026",status:"Announced",tags:["legal","finance","regulatory"],
+    summary:"Northgate's proposed acquisition of Cascade Cloud creates a hyperscale cloud infrastructure player across EMEA, with the transaction under simultaneous review by the European Commission and UK CMA.",
+    analysis:{
+      finance:"Northgate funds $5.1B via a syndicated term loan (L+250bps) and $1.3B in rollover equity from Cascade's principal shareholders. The $6.4B EV implies 28x forward EV/EBITDA, reflecting Cascade's 38% three-year revenue CAGR and 71% gross margins. A $180M earnout is payable on EMEA revenue hitting $1.2B by end-2028.",
+      legal:"The rollover equity structure requires careful navigation of Takeover Code 'Acting in Concert' provisions. Participating shareholders face a 24-month lock-up with orderly market provisions. Representation and Warranty Insurance ($4.5B coverage) placed with Aon limits recourse against founders post-completion to fundamental warranties only.",
+      dispute:"The European Commission has opened a Phase II investigation citing potential foreclosure in sovereign cloud services for EU member states. Three competing cloud providers have intervened. The CMA is conducting a parallel review on a separate timeline, creating jurisdictional complexity around conditional clearances.",
+      strategic:"Cascade's sovereign cloud architecture — compliant with EU data localisation requirements — is the primary strategic asset. Northgate gains immediate access to 40 contracted government clients across 12 EU jurisdictions. The acquisition positions the combined group for the anticipated EU Cloud Act procurement wave, estimated at €12B over four years."
+    }
+  },
+  {
+    id:"deal-006",
+    acquirer:"Redwood Capital Partners",target:"Vesta Luxury Hotels Group",
+    value:"$2.8B",premium:"17%",structure:"Leveraged Buyout",sector:"Hospitality / Real Estate",
+    date:"14 May 2026",status:"Announced",tags:["finance","legal"],
+    summary:"Redwood's private equity consortium is executing a take-private of Vesta Luxury Hotels via an LBO, with real estate assets to be separated and sold to a REIT co-investor at completion.",
+    analysis:{
+      finance:"The $2.8B EV is financed through $1.1B in equity from Redwood Fund IV, $980M in senior secured term loans and $420M in mezzanine notes at 10.5% PIK. A REIT co-investor acquires 23 freehold properties for $1.35B simultaneously, reducing Redwood's net equity at risk to $740M. Pro-forma OpCo leverage stands at 5.9x EBITDA.",
+      legal:"The structure involves two simultaneous closings: the public-to-private buyout and a property sale-and-leaseback to the REIT co-investor under 25-year full-repairing leases at 5.2% initial yield. Intercreditor arrangements are governed via a Lux HoldCo structure. Change-of-control provisions in Vesta's management contracts require board-level consent from 65% of General Managers.",
+      dispute:"Vesta's pension trustees have issued a Section 231 notice under the Pensions Act 2004, triggering Pensions Regulator oversight. Trustees are seeking additional security of £145M against the pension deficit. A minority shareholder is considering a legal challenge on the grounds that the sale-and-leaseback structure artificially suppresses NAV.",
+      strategic:"Redwood's thesis centres on operational improvement across Vesta's 31-property portfolio, where RevPAR trails the competitive set by 14%. A planned rebranding to premium lifestyle positioning and £180M in targeted capex over three years is expected to close that gap. The REIT structure unlocks balance sheet capital for reinvestment while securing the real estate relationship long-term."
+    }
+  }
+];
+
+const RUMOURS = [
+  {id:"r-001",text:"Multiple banking sources indicate Helios Semiconductor is in preliminary discussions with two unnamed US strategic acquirers, potentially valued at $20B+. No formal process has been launched.",confidence:2,source:"Bloomberg Intelligence / Industry Sources",date:"19 May 2026"},
+  {id:"r-002",text:"Cerberus Credit Partners is rumoured to be assembling a consortium bid for distressed European retailer Lachlan Group, with KPMG understood to be advising on a pre-pack administration.",confidence:3,source:"Debtwire / FT Alphaville",date:"18 May 2026"},
+  {id:"r-003",text:"Regulatory filings suggest Pinnacle Asset Management has amassed a 7.4% stake in GlobalPort Logistics, raising speculation of an activist campaign targeting a strategic sale or spin-off.",confidence:4,source:"SEC Form 13D (draft) / WSJ",date:"17 May 2026"},
+  {id:"r-004",text:"Whispers persist that a Big 4 insurance group is exploring a transformational merger with a mid-tier US peer, with UBS and Barclays both understood to have been approached for mandates.",confidence:2,source:"Reuters / Insider Intelligence",date:"16 May 2026"}
+];
+
+const MARKET_METRICS = [
+  {label:"Global M&A Volume (YTD)",value:"$1.42T",trend:"up"},
+  {label:"Avg. Deal Premium",value:"26.3%",trend:"up"},
+  {label:"Cross-Border %",value:"38%",trend:"down"},
+  {label:"PE Buyout Activity",value:"$312B",trend:"up"},
+  {label:"Hostile Transactions",value:"14",trend:"up"},
+  {label:"Avg. Days to Close",value:"182d",trend:"down"}
+];
+
+const TICKER_ITEMS = [
+  {company:"SYNAPSE / MERIDIAN",text:"$14.2B Life Sciences Deal · Phase 2 CMA Review Flagged",value:"+28%"},
+  {company:"ATLAS / FLUXION",text:"Hostile Tender · Poison Pill Activated · Delaware Filing",value:"+41%"},
+  {company:"VANTAGE / AEOLUS",text:"$8.7B Infrastructure Take-Private · OFGEM & NS&I Review",value:"+19%"},
+  {company:"NORTHGATE / CASCADE",text:"$6.4B Cloud Deal · EC Phase II Investigation Opened",value:"+35%"},
+  {company:"CORVALLIS / TRENTHAM",text:"Agreed All-Share Merger · Aerospace & Defence Platform",value:"+22%"},
+  {company:"REDWOOD / VESTA",text:"LBO + REIT Sale-Leaseback · Pensions Regulator Oversight",value:"+17%"}
+];
+
+// ── State ────────────────────────────────────────────────────────────────────
+let activeFilter = "all";
+let activeModalId = null;
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", () => {
+  renderTicker();
+  renderDeals(DEALS);
+  renderRumours();
+  renderMarketPulse();
+  setLastUpdated();
+  document.getElementById("footer-year").textContent = new Date().getFullYear();
+  setupFilters();
+  setupModal();
+  setupRefreshBtn();
+  setupNavHighlight();
+});
+
+// ── Ticker ───────────────────────────────────────────────────────────────────
+function renderTicker() {
+  const el = document.getElementById("ticker-content");
+  const seg = TICKER_ITEMS.map(item =>
+    `<span class="ticker-item"><span class="ticker-company">${item.company}</span>&nbsp;&nbsp;${item.text}&nbsp;&nbsp;<span class="ticker-value">${item.value}</span></span>`
+  ).join('<span style="color:rgba(201,168,76,0.4);margin-right:40px;">◆</span>');
+  el.innerHTML = seg + "&nbsp;&nbsp;&nbsp;&nbsp;" + seg;
+}
+
+// ── Deals ─────────────────────────────────────────────────────────────────────
+function renderDeals(deals) {
+  const grid = document.getElementById("deal-grid");
+  const badge = document.getElementById("deal-count");
+  if (!deals.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-text">No deals match this filter</div></div>`;
+    badge.textContent = "0 deals";
+    return;
+  }
+  badge.textContent = `${deals.length} deal${deals.length !== 1 ? "s" : ""}`;
+  grid.innerHTML = deals.map((d, i) => `
+    <article class="deal-card" id="${d.id}" tabindex="0" style="animation-delay:${i*0.06}s" role="button" aria-label="View analysis: ${d.acquirer} / ${d.target}">
+      <div class="deal-card-header">
+        <div class="deal-card-title">${d.acquirer} Acquisition of ${d.target}</div>
+        <div class="deal-value-badge">${d.value}</div>
+      </div>
+      <div class="deal-parties">
+        <span class="acquirer">${d.acquirer}</span><span class="arrow"> → </span><span class="target">${d.target}</span>
+      </div>
+      <p class="deal-summary">${d.summary}</p>
+      <div class="deal-card-footer">
+        <div class="deal-tags">${d.tags.map(t=>`<span class="tag ${t}-tag">${cap(t)}</span>`).join("")}</div>
+        <div class="deal-meta">
+          <span class="deal-date">${d.date}</span>
+          <span class="deal-sector">${d.sector}</span>
+          <span class="read-more-arrow">Deep Analysis →</span>
+        </div>
+      </div>
+    </article>`).join("");
+  deals.forEach(d => {
+    const card = document.getElementById(d.id);
+    card.addEventListener("click", () => openModal(d.id));
+    card.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" ") openModal(d.id); });
+  });
+}
+
+// ── Filters ───────────────────────────────────────────────────────────────────
+function setupFilters() {
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeFilter = btn.dataset.filter;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderDeals(activeFilter === "all" ? DEALS : DEALS.filter(d => d.tags.includes(activeFilter)));
+    });
+  });
+}
+
+// ── Rumours ───────────────────────────────────────────────────────────────────
+function renderRumours() {
+  document.getElementById("rumour-list").innerHTML = RUMOURS.map((r, i) => {
+    const pips = Array.from({length:5},(_,idx)=>`<span class="confidence-pip${idx<r.confidence?" filled":""}"></span>`).join("");
+    return `<div class="rumour-card" style="animation-delay:${0.3+i*0.08}s">
+      <div class="rumour-confidence"><span class="confidence-label">Intelligence</span><div class="confidence-bar">${pips}</div></div>
+      <p class="rumour-text">${r.text}</p>
+      <div class="rumour-source">Source: ${r.source} · ${r.date}</div>
+    </div>`;
+  }).join("");
+}
+
+// ── Market Pulse ──────────────────────────────────────────────────────────────
+function renderMarketPulse() {
+  document.getElementById("pulse-metrics").innerHTML = MARKET_METRICS.map(m =>
+    `<div class="pulse-metric"><span class="pulse-metric-label">${m.label}</span><span class="pulse-metric-value ${m.trend}">${m.value}</span></div>`
+  ).join("");
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function setupModal() {
+  document.getElementById("modal-close").addEventListener("click", closeModal);
+  document.getElementById("modal-overlay").addEventListener("click", e => { if(e.target===document.getElementById("modal-overlay")) closeModal(); });
+  document.addEventListener("keydown", e => { if(e.key==="Escape"&&activeModalId) closeModal(); });
+}
+
+function openModal(id) {
+  const deal = DEALS.find(d => d.id === id);
+  if (!deal) return;
+  activeModalId = id;
+  const statusColor = {"Announced":"var(--sky-400)","Under Review":"var(--amber-400)","Hostile":"var(--red-400)","Agreed":"var(--emerald-400)"}[deal.status]||"var(--text-secondary)";
+  document.getElementById("modal-content").innerHTML = `
+    <div class="modal-header">
+      <div class="modal-tags">
+        ${deal.tags.map(t=>`<span class="tag ${t}-tag">${cap(t)}</span>`).join("")}
+        <span class="tag" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:${statusColor}">${deal.status}</span>
+      </div>
+      <h2 class="modal-title">${deal.acquirer} Acquisition of ${deal.target}</h2>
+      <div class="modal-parties-row">
+        <span class="modal-acquirer">${deal.acquirer}</span>
+        <span class="modal-arrow"> → </span>
+        <span class="modal-target">${deal.target}</span>
+      </div>
+      <div class="modal-kv-grid">
+        <div class="modal-kv"><div class="modal-kv-key">Deal Value</div><div class="modal-kv-value highlight">${deal.value}</div></div>
+        <div class="modal-kv"><div class="modal-kv-key">Premium</div><div class="modal-kv-value highlight">${deal.premium}</div></div>
+        <div class="modal-kv"><div class="modal-kv-key">Structure</div><div class="modal-kv-value">${deal.structure}</div></div>
+        <div class="modal-kv"><div class="modal-kv-key">Sector</div><div class="modal-kv-value">${deal.sector}</div></div>
+        <div class="modal-kv"><div class="modal-kv-key">Announced</div><div class="modal-kv-value">${deal.date}</div></div>
+        <div class="modal-kv"><div class="modal-kv-key">Status</div><div class="modal-kv-value" style="color:${statusColor}">${deal.status}</div></div>
+      </div>
+    </div>
+    <div class="lens-grid">
+      <div class="lens-card">
+        <div class="lens-header"><div class="lens-icon finance">💹</div><span class="lens-label finance">Financial Structure</span></div>
+        <div class="lens-body">${deal.analysis.finance}</div>
+      </div>
+      <div class="lens-card">
+        <div class="lens-header"><div class="lens-icon legal">⚖️</div><span class="lens-label legal">Legal Framework</span></div>
+        <div class="lens-body">${deal.analysis.legal}</div>
+      </div>
+      <div class="lens-card">
+        <div class="lens-header"><div class="lens-icon dispute">🔴</div><span class="lens-label dispute">Dispute & Regulatory Risk</span></div>
+        <div class="lens-body">${deal.analysis.dispute}</div>
+      </div>
+      <div class="lens-card">
+        <div class="lens-header"><div class="lens-icon strategic">🎯</div><span class="lens-label strategic">Strategic Rationale</span></div>
+        <div class="lens-body">${deal.analysis.strategic}</div>
+      </div>
+    </div>`;
+  document.getElementById("modal-overlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  document.getElementById("modal-overlay").classList.remove("open");
+  document.body.style.overflow = "";
+  activeModalId = null;
+}
+
+// ── Refresh ───────────────────────────────────────────────────────────────────
+function setupRefreshBtn() {
+  const btn = document.getElementById("refresh-btn");
+  btn.addEventListener("click", () => {
+    btn.classList.add("spinning");
+    setTimeout(() => {
+      btn.classList.remove("spinning");
+      setLastUpdated();
+      const badge = document.getElementById("live-badge");
+      badge.style.background = "rgba(52,211,153,0.25)";
+      setTimeout(() => { badge.style.background = ""; }, 600);
+    }, 900);
+  });
+}
+
+// ── Nav Highlight ─────────────────────────────────────────────────────────────
+function setupNavHighlight() {
+  const navMap = {deals:"nav-deals",horizon:"nav-horizon",about:"nav-about"};
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        Object.values(navMap).forEach(id => document.getElementById(id)?.classList.remove("active"));
+        const link = navMap[e.target.id];
+        if (link) document.getElementById(link)?.classList.add("active");
+      }
+    });
+  }, {rootMargin:"-30% 0px -60% 0px"});
+  ["deals","horizon","about"].forEach(id => { const el = document.getElementById(id); if(el) obs.observe(el); });
+}
+
+// ── Utils ─────────────────────────────────────────────────────────────────────
+function setLastUpdated() {
+  const now = new Date();
+  document.getElementById("last-updated").textContent =
+    `Updated: ${now.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})} · ${now.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}`;
+}
+function cap(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
+</script>
+</body>
+</html>
